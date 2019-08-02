@@ -1,5 +1,5 @@
 const page = figma.currentPage;
-const depthLimit = 5;
+const depthLimit = 7;
 
 function visit(x, y, radius, depth, dir) {
   if (depth < depthLimit) {

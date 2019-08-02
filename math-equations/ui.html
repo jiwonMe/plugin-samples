@@ -1,0 +1,29 @@
+<!--
+  @copyright Jiwon Park
+
+  ui.html
+-->
+
+<h2>Math Equation</h2>
+<p>Equation: <input id="equation" value="\sum_{n=1}^\infty \frac{1}{n^2}=\frac{6}{\pi^2}"></p>
+<p>Size: <input id="size" value=17></p>
+<button id="create-math">Create Equation</button>
+<p>developed by Jiwon Park</p>
+
+<script>
+document.getElementById('create-math').onclick = () => {
+  const equation = document.getElementById('equation').value;
+  const size = document.getElementById('size').value;
+  const request = new XMLHttpRequest();
+  request.open('GET', 'https://tex.s2cms.ru/svg/'+encodeURI(equation));
+  request.responseType = 'text';
+  //console.log(request);
+  request.onload = () => {
+    const eq = request.responseText;
+    //console.log(eq);
+    parent.postMessage({ pluginMessage: {type: 'create-math', eq, size}}, '*')
+  }
+  //호출
+  request.send();
+}
+</script>
