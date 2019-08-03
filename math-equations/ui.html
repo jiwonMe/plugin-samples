@@ -8,6 +8,10 @@
 
 <p>Equation: <input id="equation" value="\pi"></p>
 <p>Size: <input id="size" value=17></input></p>
+<p>xmin: <input id="xmin" value=-5></input></p>
+<p>xmax:<input id="xmax" value=5></input></p>
+<p>ymin: <input id="ymin" value=-5></input></p>
+<p>ymax: <input id="ymax" value=5></input></p>
 <button id="create-math">Create Equation</button>
 <button id="create-plot">Create Plot</button>
 
@@ -34,12 +38,34 @@
   }
 
   document.getElementById('create-plot').onclick = () => {
+
+    const xmin = document.getElementById('xmin').value;
+    const xmax = document.getElementById('xmax').value;
+    const ymin = document.getElementById('ymin').value;
+    const ymax = document.getElementById('ymax').value;
+
+    const width = xmax-xmin;
+    const height = ymax-ymin;
+
     const equation = document.getElementById('equation').value;
     const request = new XMLHttpRequest();
     var str;
-    str = encodeURI("$$\\begin\{tikzpicture\}[scale=1.0544]\\small\\begin\{axis\}[axis x line=center, axis y line=center,xlabel=\{$x$\},ylabel=\{$y$\},samples=240,width=9.0cm, height=9.0cm,xmin=-5, xmax=5,ymin=-5, ymax=5,restrict y to domain=-6:6,axis equal]\\addplot[red,domain=-6:6,semithick]\{"
-      + equation +
-      "\};\\end\{axis\}\\end\{tikzpicture\}$$");
+    str = encodeURI(`$$\\begin\{tikzpicture\}[scale=1.0544]
+    \\small\\begin\{axis\}
+    [axis x line=center, axis y line=center,
+    xlabel=\{$x$\},ylabel=\{$y$\},
+    samples=240,
+    width=${width}cm, 
+    height=${height}cm,
+    xmin=${xmin}, xmax=${xmax},
+    ymin=${ymin}, ymax=${ymax},
+    restrict y to domain=${ymin}:${ymax},axis equal]
+    \\addplot[
+      red,domain=${xmin}:${xmax},semithick
+    ]
+    \{${equation}\};
+    \\end\{axis\}
+    \\end\{tikzpicture\}$$`);
 
     request.open('GET', 'https://tex.s2cms.ru/svg/' + str);
     request.responseType = 'text';
