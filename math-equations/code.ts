@@ -43,7 +43,26 @@ figma.ui.onmessage = msg => {
     //figma.viewport.scrollAndZoomIntoView(nodes);
   }
 
+  //plot 생성 (tikz)
+  if (msg.type === 'create-plot') {
+    const nodes: SceneNode[] = [];
+    const eqFrame = figma.createNodeFromSvg(msg.eq);
+
+    //위치
+    eqFrame.x = figma.viewport.center.x;
+    eqFrame.y = figma.viewport.center.y;
+
+    nodes.push(eqFrame);
+
+    //현재 페이지에 추가
+    figma.currentPage.appendChild(eqFrame);
+
+    //생성된 객체 선택
+    figma.currentPage.selection = nodes;
+    //생성된 객체로 viewport 이동 및 확대
+    //figma.viewport.scrollAndZoomIntoView(nodes);
+  }
   // Make sure to close the plugin when you're done. Otherwise the plugin will
   // keep running, which shows the cancel button at the bottom of the screen.
-  figma.closePlugin();
+  //figma.closePlugin();
 };
